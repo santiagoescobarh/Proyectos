@@ -1,0 +1,24 @@
+int PIRPin = 2;
+unsigned long contador = 0;
+
+void setup()
+{
+  pinMode(PIRPin, INPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  int value = digitalRead(PIRPin);
+
+  if (value == HIGH)
+  {
+    contador++;
+
+    Serial.print("Deteccion #");
+    Serial.print(contador);
+    Serial.println(": Movimiento detectado");
+
+    delay(500); // Evita múltiples conteos por una misma detección
+  }
+}

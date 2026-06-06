@@ -1,0 +1,70 @@
+const int trigPin = 2;
+const int echoPin = 3;
+const int ledPin = 13;
+const int buzzerPin = 12;
+
+void setup() {
+  Serial.begin(9600);
+
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  pinMode(ledPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
+}
+
+void loop() {
+  long duration;
+  long cm;
+
+  // Generar pulso ultrasónico
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+
+  digitalWrite(trigPin, LOW);
+
+  // Medir tiempo de retorno
+  duration = pulseIn(echoPin, HIGH);
+
+  // Convertir a centímetros
+  cm = duration / 58;
+
+  Serial.print("Distancia: ");
+  Serial.print(cm);
+  Serial.println(" cm");
+
+  if (cm <= 150 && cm > 50) {
+    // Objeto detectado a distancia media
+    digitalWrite(ledPin, HIGH);
+
+    tone(buzzerPin, 1500);
+    delay(400);
+    noTone(buzzerPin);
+    delay(400);
+  }
+  else if (cm <= 50 && cm > 20) {
+    // Objeto cerca
+    digitalWrite(ledPin, HIGH);
+
+    tone(buzzerPin, 2000);
+    delay(100);
+    noTone(buzzerPin);
+    delay(100);
+  }
+  else if (cm <= 20) {
+    // Objeto muy cerca
+    digitalWrite(ledPin, HIGH);
+
+    tone(buzzerPin, 2500);
+  }
+  else {
+    // Sin objeto cercano
+    digitalWrite(ledPin, LOW);
+    noTone(buzzerPin);
+
+    delay(100);
+  }
+}
